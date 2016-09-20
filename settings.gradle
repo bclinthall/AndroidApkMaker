@@ -1,0 +1,1 @@
+include ':android_apkmaker', ':sdklib_apkbuilder'

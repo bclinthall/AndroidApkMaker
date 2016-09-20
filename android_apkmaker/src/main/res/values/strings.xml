@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Install Prompt</string>
+    <string name="unknown_sources_title">
+        Allow IconPack Installation
+    </string>
+    <string name="unknown_sources_text">
+        The only source for new apps that your device knows is your app store.  But IconEffects
+        is going to build a new icon pack app for you right here on your device.  To install
+        that new icon pack, you need to tell your device to allow installation of apps from
+        unknown sources.
+        \n\nEnabling Unknown Sources does not allow apps to be installed without your
+        explicit case by case consent.  You will still be shown a list of special permissions
+        requested by an app and asked if you want to install it. You should always pay close attention
+        to the permissions list, especially if you\'re allowing unknown sources.
+        \n\nAn IconEffects IconPack requires no special permissions.
+        \n\nClicking "OK" will take you to the settings screen where you can check the box to
+        allow "Unknown Sources."
+    </string>
+    <string name="installed">{{appName}} Installed</string>
+    <string name="open">Open</string>
+    <string name="done">Done</string>
+    <string name="retry_install">Installation failed.  Please do not navigate away from
+    install screen.</string>
+    <string name="retry">retry</string>
+    <string name="no_signed_apk">There is no apk to install.  Please try again.</string>
+    <string name="building_apk_title">Building Apk</string>
+    <string name="building_started">Getting started</string>
+    <string name="building_done">Done building {{appName}}</string>
+    <string name="building_failed">Failed to build {{appName}}</string>
+    <string name="tap_to_install">Tap here to install</string>
+    <string name="upack_aapt_failed">Failed to unpack aapt.
+        \n\nDid the developer forget to include it in the assets folder?</string>
+    <string name="upack_androidJar_failed">Failed to unpack android.jar.
+        \n\nDid the developer forget to include it in the assets folder?</string>
+    <string name="sign_failed">Failed to sign apk</string>
+</resources>

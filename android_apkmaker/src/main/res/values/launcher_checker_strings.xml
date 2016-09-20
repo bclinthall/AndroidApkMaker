@@ -1,0 +1,21 @@
+<resources>
+    <string name="apply">Apply</string>
+    <string name="auto_apply_title">Apply Icon Pack</string>
+        <string name="iconeffects_msg">If you haven\'t already done so, now would be a good time to
+    tell your launcher to apply your IconEffects IconPack on your home screen and app drawer.</string>
+    <string name="auto_apply_msg">You have {{number}} custom launchers installed.  Select from the list below to automatically apply your icon pack, or manually apply it using a different laucher.</string>
+    <string name="no_custom_launchers_title">
+        Get a custom launcher
+    </string>
+    <string name="auto_apply_unavailable">Auto Apply Unavailable</string>
+    <string name="no_custom_launchers">
+        You have no recognized custom launchers installed. Without a custom launcher
+        your phone isn\'t capable of appling an icon pack to your home screen. There are
+        many nice custom launchers available.  Below are play store links for a few lauchers that
+        I can recommend.
+        \n\nOnce you have a custom laucher up and running, come back here to apply your IconEffects IconPack.
+    </string>
+    <string name="no_auto_apply">You have {{number}} custom launchers installed.  At this time, IconEffects cannot auto apply your icon pack on any of those lauchers.  Please manually apply it using the theme settings of your favorite laucher or get an auto apply launcher from the list below.</string>
+    <string name="show_more">Show More</string>
+
+</resources>
