@@ -1,0 +1,5 @@
+http://android.git.kernel.org/
+
+[platform/external/libpng.git] / Android.mk
+
+https://android.googlesource.com/platform/external/libpng/+/nougat-dev

@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':sdklib_apkbuilder')
+    compile group: 'org.eclipse.jdt.core.compiler', name: 'ecj', version: '4.5.1'
+    compile group: 'com.google.android.tools', name: 'dx', version: '1.7'
+}
+
+sourceCompatibility = "1.6"
+targetCompatibility = "1.6"

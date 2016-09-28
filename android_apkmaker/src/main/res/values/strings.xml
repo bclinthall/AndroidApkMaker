@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Install Prompt</string>
     <string name="unknown_sources_title">
-        Allow IconPack Installation
+        Allow Apk Installation
     </string>
     <string name="unknown_sources_text">
         The only source for new apps that your device knows is your app store.  But IconEffects

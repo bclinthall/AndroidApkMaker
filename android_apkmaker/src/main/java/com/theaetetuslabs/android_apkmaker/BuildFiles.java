@@ -3,7 +3,7 @@ package com.theaetetuslabs.android_apkmaker;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.theaetetuslabs.javaapkmaker.Logger;
+import com.theaetetuslabs.java_apkmaker.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.io.IOException;
 public class BuildFiles {
     private File extFileDir;
     File extApk;
-    private File fileDir;
+    private File filesDir;
     private File buildDir;
     private File apks;
     File signed;
@@ -29,8 +29,8 @@ public class BuildFiles {
     BuildFiles(Context context){
         extFileDir = context.getExternalFilesDir(null);
         extApk = new File(extFileDir, "extApk.apk");
-        fileDir = context.getFilesDir();
-        buildDir = initDir(fileDir, "buildStuff");
+        filesDir = context.getFilesDir();
+        buildDir = initDir(filesDir, "buildStuff");
         apks = initDir(buildDir, "apks");
         signed = new File(apks, "signed.apk");
         unsigned = new File(apks, "unsigned.apk");

@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="com.theaetetuslabs.android_apkmaker"
           xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <uses-permission
+        android:name="android.permission.GET_TASKS"
+        android:maxSdkVersion="20"/>
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18"/>
     <application
         android:label="@string/app_name"
         android:supportsRtl="true"
         >
         <activity android:name=".InstallActivity"
                   android:label="@string/app_name"/>
-        <service
-            android:name=".ApkMakerService"
-            android:exported="false"/>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.theaetetuslabs.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

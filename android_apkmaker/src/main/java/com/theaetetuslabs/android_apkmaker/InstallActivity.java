@@ -4,22 +4,22 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.provider.Settings.SettingNotFoundException;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.theaetetuslabs.javaapkmaker.Logger;
-import com.theaetetuslabs.launcher.Launcher;
-import com.theaetetuslabs.launcher.Launcher.AfterApply;
+import com.theaetetuslabs.java_apkmaker.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -90,23 +90,10 @@ public class InstallActivity extends AppCompatActivity {
                     }
                 })
                 .setCancelable(false);
-        addSpecificStuff(builder);
+        if(AndroidApkMaker.adder!=null){
+            AndroidApkMaker.adder.addToAfterInstallDialog(builder, this);
+        }
         afterInstallDialog = builder.show();
-    }
-    protected void addSpecificStuff(AlertDialog.Builder builder){
-        //IconEffects specific stuff.
-        builder.setMessage(R.string.iconeffects_msg);
-        builder.setNeutralButton(R.string.apply, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Launcher.launcherApplyOrGet(InstallActivity.this, new AfterApply() {
-                    @Override
-                    public void afterApply() {
-                        finish();
-                    }
-                });
-            }
-        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -132,8 +119,6 @@ public class InstallActivity extends AppCompatActivity {
         Log.d("TAG", "============Install Activity Created");
 
         setContentView(R.layout.activity_install);
-        Timer timer = new Timer();
-        timer.schedule(new TopDogCheck(timer, this), 100);
         files = new BuildFiles(this);
     }
 
@@ -143,6 +128,7 @@ public class InstallActivity extends AppCompatActivity {
         if(afterInstallDialog!=null) afterInstallDialog.cancel();
         if(tryAgainDialog!=null) tryAgainDialog.cancel();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -154,11 +140,17 @@ public class InstallActivity extends AppCompatActivity {
                 finish();
                 return;
             }
-            if(slc.canSideLoad()) {
-                needStartInstall = false;
-                new MoveApkTask().execute();
-            }else{
+            if(!slc.canSideLoad()) {
                 slc.requestSideLoad();
+                return;
+            }
+            needStartInstall = false;
+            try {
+                tryInstallInternal();
+            } catch (Exception e) {
+                Timer timer = new Timer();
+                timer.schedule(new TopDogCheck(timer, this), 100);
+                moveApk();
             }
         }
     }
@@ -166,19 +158,50 @@ public class InstallActivity extends AppCompatActivity {
         return getString(id).replace(oldStr, newStr);
     }
 
-    private void promptInstall(){
-        File apk = files.extApk;
-        if(apk.exists()) {
-            Intent promptInstall = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-            promptInstall.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
-            promptInstall.putExtra(Intent.EXTRA_RETURN_RESULT, true);
-            promptInstall.setData(Uri.fromFile(apk));
+    private Intent getInstallIntent(){
+        Intent promptInstall = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+        promptInstall.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        promptInstall.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
+        promptInstall.putExtra(Intent.EXTRA_RETURN_RESULT, true);
+        return promptInstall;
+    }
+    private void tryInstallInternal() throws Exception {
+        Log.d("TAG", "signed exists? " + files.signed.exists() + ", " + files.signed.getAbsolutePath());
+        if(files.signed.exists()) {
+            //can install from uri: 24
+            //cannot install from uri: 23, 22, 19 or 16
+            Uri contentUri = FileProvider.getUriForFile(this, "com.theaetetuslabs.fileprovider", files.signed);
+            grantUriPermission("com.android.packageinstaller", contentUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Intent promptInstall = getInstallIntent();
+            promptInstall.setData(contentUri);
+            List<ResolveInfo> list =
+                    getPackageManager().queryIntentActivities(promptInstall,
+                            PackageManager.MATCH_DEFAULT_ONLY);
+            if(list.size() > 0) {
+                try {
+                    startActivityForResult(promptInstall, INSTALL_REQUEST);
+                    Log.d("TAG", "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^Handled content URI");
+                } catch (android.content.ActivityNotFoundException e) {
+                    throw new Exception("Cannot Install from Internal Storage");
+                }
+            }else{
+                throw new Exception("Cannot Install from Internal Storage");
+        }
+        }
+    }
+    private void tryExternalInstall(){
+        Log.d("TAG", "extApk exits? " + files.extApk.exists() + ", " + files.extApk.getAbsolutePath());
+        if(files.extApk.exists()) {
+            Intent promptInstall = getInstallIntent();
+            Log.d("TAG", "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^NO NO NO NO NOT Handled content URI");
+            promptInstall.setData(Uri.fromFile(files.extApk));
             startActivityForResult(promptInstall, INSTALL_REQUEST);
         }
     }
     private void moveApk(){
         if(moveApkTask==null){
-            new MoveApkTask().execute();
+            moveApkTask = new MoveApkTask();
+            moveApkTask.execute();
         }
     }
     private class MoveApkTask extends AsyncTask<Void, Void, Boolean>{
@@ -214,7 +237,7 @@ public class InstallActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
-                promptInstall();
+                tryExternalInstall();
             }else{
                 BuildFiles.deleteFiles(files.extApk);
             }

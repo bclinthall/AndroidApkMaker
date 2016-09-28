@@ -2,13 +2,18 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        //ndk {
+            // Specifies the ABI configurations of your native
+            // libraries Gradle should build and package with your APK.
+            //abiFilters 'x86', 'armeabi', 'armeabi-v7a'
+        //}
     }
     buildTypes {
         release {
@@ -16,13 +21,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    /*externalNativeBuild {
+        ndkBuild {
+            path 'src/jni/Android.mk'
+        }
+    }*/
+
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':sdklib_apkbuilder')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile group: 'org.eclipse.jdt.core.compiler', name: 'ecj', version: '4.5.1'
-    compile group: 'com.google.android.tools', name: 'dx', version: '1.7'
+    compile project(':java_apkmaker')
 }

@@ -1,5 +1,6 @@
 package com.theaetetuslabs.android_apkmaker;
 
+import android.app.AlertDialog;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,9 +10,10 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.support.v4.app.NotificationCompat;
-import com.theaetetuslabs.javaapkmaker.ApkMaker.Callbacks;
-import com.theaetetuslabs.javaapkmaker.Logger;
-import com.theaetetuslabs.javaapkmaker.Main.ApkMakerOptions;
+
+import com.theaetetuslabs.java_apkmaker.ApkMaker.Callbacks;
+import com.theaetetuslabs.java_apkmaker.Logger;
+import com.theaetetuslabs.java_apkmaker.ApkMaker.ApkMakerOptions;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,7 +38,8 @@ public class AndroidApkMaker {
     NotificationCompat.Builder mBuilder;
     static String newAppName;
     static String newAppPackage;
-    String projectDirectory;
+    static AfterInstallDialogAdder adder;
+    String projectDirectoryPath;
     boolean verbose;
     BuildFiles buildFiles;
     public AndroidApkMaker(IntentService service, 
@@ -46,10 +49,21 @@ public class AndroidApkMaker {
         this.mNotifyManager = mNotifyManager;
         this.mBuilder = mBuilder;
     }
-    public void make(String newAppName, String newAppPackage, String projectDirectory, boolean verbose){
+    public void make(String projectDirectoryPath, boolean verbose){
+        make(null, null, projectDirectoryPath, verbose, false);
+    }
+    public void make(String newAppName, String newAppPackage, String projectDirectoryPath, boolean promptForInstall, boolean verbose){
+        make(newAppName, newAppPackage, projectDirectoryPath, promptForInstall, verbose, null);
+
+    }
+    public void make(String newAppName, String newAppPackage, String projectDirectoryPath, boolean verbose, AfterInstallDialogAdder adder){
+        make(newAppName, newAppPackage, projectDirectoryPath, true, verbose, adder);
+    }
+    public void make(String newAppName, String newAppPackage, String projectDirectoryPath, boolean promptForInstall, boolean verbose, AfterInstallDialogAdder adder){
+        this.adder = adder;
         AndroidApkMaker.newAppName = newAppName;
         AndroidApkMaker.newAppPackage = newAppPackage;
-        this.projectDirectory = projectDirectory;
+        this.projectDirectoryPath = projectDirectoryPath;
         this.verbose = verbose;
 
         buildFiles = new BuildFiles(service).clear();
@@ -68,7 +82,7 @@ public class AndroidApkMaker {
             return;
         }
 
-        makeApk(mNotifyManager, mBuilder, projectDirectory, verbose);
+        makeApk(mNotifyManager, mBuilder, projectDirectoryPath, verbose);
 
         try {
             signApk();
@@ -77,12 +91,11 @@ public class AndroidApkMaker {
             sendFailNotification(service.getString(R.string.sign_failed) +": "+ e.getMessage());
         }
 
-        if(buildFiles.signed.exists()){
+        if(promptForInstall && buildFiles.signed.exists()){
             sendInstallNotification();
         }else{
             sendFailNotification("signed.apk doesn't exist");
         }
-        
     }
     private static File unpackAsset(Context context, String assetName, File dest) throws IOException {
         if(!dest.exists()){
@@ -156,7 +169,25 @@ public class AndroidApkMaker {
         options.projectDir = projectDirPath;
         options.outputFile = buildFiles.unsigned.getAbsolutePath();
         options.verbose = verbose;
-        com.theaetetuslabs.javaapkmaker.Main.main(options, null, null, new Callbacks() {
+        options.aaptRunner = null;/*new AaptRunner(){
+            @Override
+            public boolean runAapt(File androidManifest, File resourcesArsc, File androidJar, File resDir, File genDir, Callbacks callbacks) {
+                String logDirPath = new File(service.getFilesDir(), "logDir").getAbsolutePath();
+                Log.d("TAG", "LogDirPath: " + logDirPath);
+                String aaptCommand = "package " +
+                        " -f " + //force overwrite existing files;
+                        " -v " +//verbose
+                        " -M " + androidManifest.getAbsolutePath() +
+                        " -F " + resourcesArsc.getAbsolutePath() +  //this is where aapt will output the resource file to go in apk
+                        " -I " + androidJar.getAbsolutePath() +
+                        " -S " + resDir.getAbsolutePath() +
+                        " -J " + genDir.getAbsolutePath();  //where to put R.java
+
+                new TArnAapt(logDirPath).fnExecute(aaptCommand);
+                return false;
+            }
+        };*/
+        com.theaetetuslabs.java_apkmaker.Main.main(options, null, null, new Callbacks() {
             @Override
             public void updateProgress(String msg, float percent) {
                 if(percent==-1){
@@ -237,6 +268,8 @@ public class AndroidApkMaker {
     private String getStringReplacing(int id, String oldStr, String newStr){
         return service.getString(id).replace(oldStr, newStr);
     }
-
+    public interface AfterInstallDialogAdder{
+        public void addToAfterInstallDialog(AlertDialog.Builder builder, InstallActivity installActivity);
+    }
 
 }
