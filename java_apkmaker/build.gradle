@@ -1,9 +1,11 @@
-apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "com.theaetetuslabs.java_apkmaker.Main"
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile group: 'org.eclipse.jdt.core.compiler', name: 'ecj', version: '4.5.1'
     compile group: 'com.google.android.tools', name: 'dx', version: '1.7'
+    
 }
 
 sourceCompatibility = "1.6"
