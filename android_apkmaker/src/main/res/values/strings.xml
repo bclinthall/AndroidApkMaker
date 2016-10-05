@@ -24,7 +24,6 @@
     <string name="retry">retry</string>
     <string name="no_signed_apk">There is no apk to install.  Please try again.</string>
     <string name="building_apk_title">Building Apk</string>
-    <string name="building_started">Getting started</string>
     <string name="building_done">Done building {{appName}}</string>
     <string name="building_failed">Failed to build {{appName}}</string>
     <string name="tap_to_install">Tap here to install</string>

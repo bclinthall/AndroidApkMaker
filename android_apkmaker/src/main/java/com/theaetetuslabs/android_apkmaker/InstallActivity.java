@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.provider.Settings.SettingNotFoundException;
@@ -145,9 +146,11 @@ public class InstallActivity extends AppCompatActivity {
                 return;
             }
             needStartInstall = false;
-            try {
+            if(Build.VERSION.SDK_INT >= 24){
+                //can install from uri: 24
+                //cannot install from uri: 23, 22, 19 or 16
                 tryInstallInternal();
-            } catch (Exception e) {
+            }else{
                 Timer timer = new Timer();
                 timer.schedule(new TopDogCheck(timer, this), 100);
                 moveApk();
@@ -165,29 +168,21 @@ public class InstallActivity extends AppCompatActivity {
         promptInstall.putExtra(Intent.EXTRA_RETURN_RESULT, true);
         return promptInstall;
     }
-    private void tryInstallInternal() throws Exception {
+    private void tryInstallInternal() {
         Log.d("TAG", "signed exists? " + files.signed.exists() + ", " + files.signed.getAbsolutePath());
-        if(files.signed.exists()) {
-            //can install from uri: 24
-            //cannot install from uri: 23, 22, 19 or 16
-            Uri contentUri = FileProvider.getUriForFile(this, "com.theaetetuslabs.fileprovider", files.signed);
-            grantUriPermission("com.android.packageinstaller", contentUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Intent promptInstall = getInstallIntent();
-            promptInstall.setData(contentUri);
-            List<ResolveInfo> list =
-                    getPackageManager().queryIntentActivities(promptInstall,
-                            PackageManager.MATCH_DEFAULT_ONLY);
-            if(list.size() > 0) {
-                try {
-                    startActivityForResult(promptInstall, INSTALL_REQUEST);
-                    Log.d("TAG", "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^Handled content URI");
-                } catch (android.content.ActivityNotFoundException e) {
-                    throw new Exception("Cannot Install from Internal Storage");
-                }
-            }else{
-                throw new Exception("Cannot Install from Internal Storage");
+        System.out.println(BuildConfig.APPLICATION_ID + ".apkmakerfileprovider");
+        Uri contentUri = FileProvider.getUriForFile(this, getPackageName() + ".apkmakerfileprovider", files.signed);
+        grantUriPermission("com.android.packageinstaller", contentUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Intent promptInstall = getInstallIntent();
+        promptInstall.setData(contentUri);
+        List<ResolveInfo> list =
+                getPackageManager().queryIntentActivities(promptInstall,
+                        PackageManager.MATCH_DEFAULT_ONLY);
+        if(list.size() > 0) {
+            startActivityForResult(promptInstall, INSTALL_REQUEST);
+            Log.d("TAG", "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^Handled content URI");
         }
-        }
+
     }
     private void tryExternalInstall(){
         Log.d("TAG", "extApk exits? " + files.extApk.exists() + ", " + files.extApk.getAbsolutePath());
