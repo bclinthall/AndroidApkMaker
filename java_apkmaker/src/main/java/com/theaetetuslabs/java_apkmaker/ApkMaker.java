@@ -126,7 +126,9 @@ public class ApkMaker {
         callbacks.done(apkUnsigned);
     }
 
-    private void runAapt(File aapt, File androidManifest, File resourcesArsc, File androidJar, File resDir, File genDir, Callbacks callbacks) {
+    /*
+     //This may become useful if I can get jni working. 
+     private void runAapt(File aapt, File androidManifest, File resourcesArsc, File androidJar, File resDir, File genDir, Callbacks callbacks) {
         //./aapt p -f -v -M precursors/AndroidManifest.xml -F precursors/resources.arsc -I android.jar -S precursors/res -J precursors/gen
         String aaptCommand = aapt.getAbsolutePath() + " package " +
                 " -f " + //force overwrite existing files;
@@ -138,7 +140,7 @@ public class ApkMaker {
                 " -J " + genDir.getAbsolutePath();  //where to put R.java
         //exec(aaptCommand, callbacks, totAaptLines, "Running aapt");
         exec(aaptCommand);
-    }
+    }*/
 
     private void runCompiler(File srcDir,/*,File genDir, */File androidJar, File classesDir/*, List<File> javaFiles*/) {
         String[] compilerArgs = {

@@ -20,20 +20,20 @@ import com.android.sdklib.internal.build.SignedJarBuilder.IZipEntryFilter.ZipAbo
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
-import java.security.SignatureException;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /*<bch>
+import java.io.FilterOutputStream;
+import java.security.Signature;
+import java.security.SignatureException;
 import sun.misc.BASE64Encoder;
 import sun.security.pkcs.ContentInfo;
 import sun.security.pkcs.PKCS7;
@@ -67,12 +67,14 @@ import java.util.zip.ZipInputStream;</bch>*/
  * A Jar file builder with signature support.
  */
 public class SignedJarBuilder {
+	/*<bch>
     private static final String DIGEST_ALGORITHM = "SHA1";
     private static final String DIGEST_ATTR = "SHA1-Digest";
     private static final String DIGEST_MANIFEST_ATTR = "SHA1-Digest-Manifest";
+	</bch>*/
 
     /** Write to another stream and also feed it to the Signature object. */
-    private static class SignatureOutputStream extends FilterOutputStream {
+    /*<bch>private static class SignatureOutputStream extends FilterOutputStream {
         private Signature mSignature;
         private int mCount = 0;
 
@@ -107,7 +109,7 @@ public class SignedJarBuilder {
             return mCount;
         }
     }
-
+    </bch>*/
     private JarOutputStream mOutputJar;
     //<bch>private PrivateKey mKey;</bch>
     //<bch>private X509Certificate mCertificate;</bch>
