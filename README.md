@@ -1,5 +1,19 @@
 I developed this apkmaker project as part of [IconEffects](https://play.google.com/store/apps/details?id=com.theaetetuslabs.iconeffects.demo), and I am releasing it under [Apache License v 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt).  It is a gradle project that contains three modules.  
 
+You can include the library modules in your project using jitpack.  In your `build.gradle` file: 
+```gradle
+repositories {
+	...
+	maven { url "https://jitpack.io" }
+}
+dependencies {
+	//for android_apkmaker.  use more recent release if available
+	compile 'com.github.theaetetus.AndroidApkMaker:android_apkmaker:v0.2-beta'
+	//for java_apkmaker.  use more recent release if available
+	compile 'com.github.theaetetus.AndroidApkMaker:android_apkmaker:v0.2-beta'
+}
+```
+
 1. `java_apkmaker`  
   A java application that makes an unsigned android apk.  To use it as such, run `gradle :java_apkmaker:installDist`. The application will be installed at `java_apkmaker/build/install/java_apkmaker/` with runnables in `java_apkmaker/build/install/java_apkmaker/bin/`. See `java_apkmaker/src/main/java/com/theaetetuslabs/java_apkmaker/Help.java` for an help with using `java_apkmaker` from the command line. There is a script to run it at `java_apkmaker/BuildApk.sh` - modify paths as appropriate for your system.
 
