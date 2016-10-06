@@ -10,7 +10,7 @@ dependencies {
 	//for android_apkmaker.  use more recent release if available
 	compile 'com.github.theaetetus.AndroidApkMaker:android_apkmaker:v0.2-beta'
 	//for java_apkmaker.  use more recent release if available
-	compile 'com.github.theaetetus.AndroidApkMaker:android_apkmaker:v0.2-beta'
+	compile 'com.github.theaetetus.AndroidApkMaker:java_apkmaker:v0.2-beta'
 }
 ```
 
