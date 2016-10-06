@@ -10,7 +10,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/android_apkmaker" />
-            <option value="$PROJECT_DIR$/apkmaker_tester" />
             <option value="$PROJECT_DIR$/java_apkmaker" />
           </set>
         </option>
