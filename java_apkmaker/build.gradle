@@ -1,4 +1,7 @@
 apply plugin: 'application'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group="com.github.theaetetus"
 
 mainClassName = "com.theaetetuslabs.java_apkmaker.Main"
 
