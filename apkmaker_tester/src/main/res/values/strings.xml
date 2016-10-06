@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ApkMakerTester</string>
+    <string name="on_install">You built and installed an app using apkmaker_tester!</string>
+
+</resources>

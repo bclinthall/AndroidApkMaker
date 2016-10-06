@@ -14,7 +14,6 @@ import com.theaetetuslabs.java_apkmaker.ApkMaker.ProjectFiles;
 
 public class Main {
     public static void main(String[] args){
-        System.out.println("From apkmaker");
         List<String> argList = Arrays.asList(args);
         Iterator<String> i = argList.iterator();
         try {
@@ -26,7 +25,7 @@ public class Main {
             }
             main(options);
         }catch(Exception e){
-            System.err.println(e.getMessage());
+            System.err.println("ApkMaker error: " + e.getMessage());
             System.err.print(Help.help);
             return;
         }

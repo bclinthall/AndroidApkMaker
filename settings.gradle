@@ -1,1 +1,1 @@
-include ':android_apkmaker', ':java_apkmaker'
+include ':android_apkmaker', ':java_apkmaker', ':apkmaker_tester'

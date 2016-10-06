@@ -9,4 +9,5 @@
 .externalNativeBuild
 /bin
 java_apkmaker/bin/
-
+android.jar
+/java_apkmaker/BuildApk/

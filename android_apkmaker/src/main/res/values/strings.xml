@@ -4,15 +4,14 @@
         Allow Apk Installation
     </string>
     <string name="unknown_sources_text">
-        The only source for new apps that your device knows is your app store.  But IconEffects
-        is going to build a new icon pack app for you right here on your device.  To install
-        that new icon pack, you need to tell your device to allow installation of apps from
+        The only source for new apps that your device knows is your app store.  But this app
+        is going to build a app for you right here on your device.  To install
+        that new app, you need to tell your device to allow installation of apps from
         unknown sources.
         \n\nEnabling Unknown Sources does not allow apps to be installed without your
         explicit case by case consent.  You will still be shown a list of special permissions
         requested by an app and asked if you want to install it. You should always pay close attention
         to the permissions list, especially if you\'re allowing unknown sources.
-        \n\nAn IconEffects IconPack requires no special permissions.
         \n\nClicking "OK" will take you to the settings screen where you can check the box to
         allow "Unknown Sources."
     </string>
