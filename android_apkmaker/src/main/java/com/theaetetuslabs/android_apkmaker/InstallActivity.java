@@ -245,9 +245,9 @@ public class InstallActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-            if(aBoolean){
+        protected void onPostExecute(Boolean copySucceeded) {
+            super.onPostExecute(copySucceeded);
+            if(copySucceeded){
                 tryExternalInstall();
             }else{
                 BuildFiles.deleteFiles(files.extApk);

@@ -4,9 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidApkMaker.iml" filepath="$PROJECT_DIR$/AndroidApkMaker.iml" />
       <module fileurl="file://$PROJECT_DIR$/android_apkmaker/android_apkmaker.iml" filepath="$PROJECT_DIR$/android_apkmaker/android_apkmaker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android_apkmaker/android_apkmaker.iml" filepath="$PROJECT_DIR$/android_apkmaker/android_apkmaker.iml" />
       <module fileurl="file://$PROJECT_DIR$/apkmaker_tester/apkmaker_tester.iml" filepath="$PROJECT_DIR$/apkmaker_tester/apkmaker_tester.iml" />
-      <module fileurl="file://$PROJECT_DIR$/java_apkmaker/java_apkmaker.iml" filepath="$PROJECT_DIR$/java_apkmaker/java_apkmaker.iml" />
       <module fileurl="file://$PROJECT_DIR$/java_apkmaker/java_apkmaker.iml" filepath="$PROJECT_DIR$/java_apkmaker/java_apkmaker.iml" />
     </modules>
   </component>
